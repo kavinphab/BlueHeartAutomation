@@ -7,17 +7,20 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 
-import { TABS } from "@/data/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/public/temporarylogo.png";
 import { usePathname } from "next/navigation";
 
 import { UserButton } from "@clerk/nextjs";
+import { Tabs } from "@/types/navigation";
 
-const Navigation = () => {
+type props = {
+  tabs: Tabs;
+};
+const Navigation = ({ tabs }: props) => {
   const path = usePathname();
-  const NAVTABS = TABS[path.split("/")[1]].tabs;
+  const NAVTABS = tabs[path.split("/")[1]].tabs;
 
   return (
     <Sidebar className="text-white">

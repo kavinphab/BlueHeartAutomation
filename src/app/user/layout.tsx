@@ -1,6 +1,7 @@
-import Navigation from "@/components/global/navigation";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { TABS } from "@/data/admin/navigation";
+import Navigation from "@/components/global/navigation";
+import { TABS } from "@/data/user/navigation";
+
 type LayoutProps = {
   children: React.ReactNode;
 };

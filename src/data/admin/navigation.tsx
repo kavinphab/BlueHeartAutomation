@@ -1,15 +1,5 @@
 import { Users, Cog, ChartNoAxesCombined, Newspaper } from "lucide-react";
-interface Tab {
-  name: string;
-  link: string;
-  icon: JSX.Element;
-}
-
-interface Collapsible {
-  expand: boolean;
-  tabs: Tab[];
-}
-type Tabs = Record<string, Collapsible>;
+import { Tabs } from "@/types/navigation";
 
 export const TABS: Tabs = {
   admin: {
