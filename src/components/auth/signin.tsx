@@ -9,6 +9,10 @@ import Oauth from "./oauth";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import { useAuth } from "@clerk/nextjs";
+import { signInWithCustomToken } from "firebase/auth";
+import { auth } from "@/utils/firebase";
+// import { signinAuth } from "@/utils/firebase";
 
 const Signin = () => {
   const { isLoaded, signIn, setActive } = useSignIn();
@@ -17,6 +21,7 @@ const Signin = () => {
   const [type] = useState("password");
   const [clerkError, setClerkError] = useState("");
   const router = useRouter();
+  const { getToken } = useAuth();
 
   // Handle the submission of the sign-in form
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,11 +35,26 @@ const Signin = () => {
         identifier: email,
         password,
       });
-
       // If sign-in process is complete, set the created session as active
       // and redirect the user
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
+        // signinAuth()
+
+        try {
+          const token = await getToken({ template: "integration_firebase" });
+
+          if (!token) {
+            console.error("No token retrieved from Clerk.");
+            return;
+          }
+
+          const userCredentials = await signInWithCustomToken(auth, token);
+
+          console.log("Firebase User:", userCredentials.user);
+        } catch (error) {
+          console.error("Error signing in with Firebase:", error);
+        }
         router.push("/");
       } else {
         // If the status is not complete, check why. User may need to

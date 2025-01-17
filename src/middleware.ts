@@ -1,7 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-const isProtectedRoute = createRouteMatcher(["/admin(.*)"]);
+const isProtectedRoute = createRouteMatcher(["/"]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
@@ -17,25 +17,22 @@ export default clerkMiddleware(async (auth, req) => {
       });
     }
   }
-});
-
-export const middleware = (request: NextRequest) => {
-  const path = request.nextUrl.pathname;
+  const path = req.nextUrl.pathname;
   //TODO: check if they have an org, if not, redirect to /user
 
   // If they just go to /orgs
   if (path === "/orgs") {
     //TODO: Get their org here, temporarily just put test
-    return NextResponse.redirect(new URL("/orgs/test", request.url));
+    return NextResponse.redirect(new URL("/orgs/test", req.url));
   }
   // If they go to /orgs/@mine, redirect them to /orgs/<their org id>
   if (path.startsWith("/orgs/@mine")) {
     //TODO: Get their org here, temporarily just put test
     return NextResponse.redirect(
-      new URL(path.replace("@mine", "test"), request.url),
+      new URL(path.replace("@mine", "test"), req.url),
     );
   }
-};
+});
 
 export const config = {
   matcher: [
